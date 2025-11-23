@@ -20,6 +20,7 @@ func main() {
 	config.DB.AutoMigrate(&models.User{})
 
 	r := gin.Default()
+	//r.Use(middleware.AuthMiddleware())
 
 	routes.UserRoute(r)
 
