@@ -5,5 +5,14 @@ type UserDTO struct {
 	Name       string `json:"name"`
 	Email      string `json:"email"`
 	Username   string `json:"username"`
-	AlamatUser string `json:"alamatUser"`
+	Alamat     string `json:"alamatUser"`
+	Created_at string `json:"createdDate"`
+}
+
+type InsertUserDTO struct {
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Alamat   string `json:"alamat"`
 }

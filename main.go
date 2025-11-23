@@ -6,7 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/kunto/golang-rest-api-berita/config"
-	"github.com/kunto/golang-rest-api-berita/models"
 	"github.com/kunto/golang-rest-api-berita/routes"
 )
 
@@ -17,7 +16,6 @@ func main() {
 	}
 
 	config.ConnectDB()
-	config.DB.AutoMigrate(&models.User{})
 
 	r := gin.Default()
 	//r.Use(middleware.AuthMiddleware())
