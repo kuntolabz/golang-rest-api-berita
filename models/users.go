@@ -15,4 +15,5 @@ type User struct {
 	Alamat    string    `json:"alamatUser"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
+	IdRole    string    `json:"id_role"`
 }

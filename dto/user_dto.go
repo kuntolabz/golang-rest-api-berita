@@ -7,6 +7,8 @@ type UserDTO struct {
 	Username   string `json:"username"`
 	Alamat     string `json:"alamatUser"`
 	Created_at string `json:"createdDate"`
+	Status     string `json:"status"`
+	IdRole     string `json:"id_role"`
 }
 
 type InsertUserDTO struct {
@@ -15,4 +17,5 @@ type InsertUserDTO struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Alamat   string `json:"alamat"`
+	IdRole   string `json:"id_role" binding:"required"`
 }

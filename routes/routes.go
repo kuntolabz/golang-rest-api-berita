@@ -14,10 +14,9 @@ func UserRoute(r *gin.Engine) {
 	//users.Use(middleware.AuthMiddleware())
 	{
 		users.POST("/", controllers.CreateUser)
-		users.GET("/get-list-users", controllers.GetUsers)
-
-		// users.GET("/:id", controllers.GetUserByID)   // GET /api/v1/users/:id
-		// users.PUT("/:id", controllers.UpdateUser)    // PUT /api/v1/users/:id
-		// users.DELETE("/:id", controllers.DeleteUser) // DELETE /api/v1/users/:id
+		users.GET("/get-list-users", controllers.GetListUsers)
+		users.GET("/:id", controllers.GetUserDetail)
+		users.PUT("/:id", controllers.UpdateUser)
+		users.DELETE("/:id", controllers.DeleteUser)
 	}
 }
