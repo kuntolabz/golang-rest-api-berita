@@ -2,68 +2,57 @@ package utils
 
 import (
 	"net/http"
-	"reflect"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
-type ResponseData struct {
-	ResponseCode    int         `json:"responseCode"`
-	ResponseMessage string      `json:"ResponseMessage"`
-	Data            interface{} `json:"data,omitempty"`
-	Error           interface{} `json:"error,omitempty"`
+type Pagination struct {
+	TotalRow int64 `json:"totalRow"`
+	Offset   int   `json:"offset"`
+	Limit    int   `json:"limit"`
 }
 
-func SuccessResponse(c *gin.Context, data interface{}, total int64, offset int, limit int) {
-	value := reflect.ValueOf(data)
-	isSlice := value.Kind() == reflect.Slice
-
-	response := gin.H{
-		"responseCode": 200,
-	}
-
-	if isSlice {
-		// Slice dengan lebih dari 1 row → dataList + pagination
-		if value.Len() > 1 {
-			response["dataList"] = data
-			response["pagination"] = gin.H{
-				"totalRow": total,
-				"offset":   offset,
-				"limit":    limit,
-			}
-		} else if value.Len() == 1 {
-			// Slice dengan 1 row → data tanpa pagination
-			response["data"] = value.Index(0).Interface()
-		} else {
-			// Slice kosong → dataList kosong, tanpa pagination
-			response["dataList"] = []interface{}{}
-		}
-	} else {
-		// Bukan slice → single object → tanpa pagination
-		response["data"] = data
-	}
-
-	c.JSON(http.StatusOK, response)
+type APIResponse struct {
+	Status       string      `json:"status"`
+	ResponseCode int         `json:"responseCode"`
+	ResponseDesc string      `json:"responseDesc"`
+	Timestamp    time.Time   `json:"timestamp"`
+	Data         interface{} `json:"data,omitempty"`
+	DataList     interface{} `json:"dataList,omitempty"`
+	Pagination   *Pagination `json:"pagination,omitempty"`
 }
 
-func Success(c *gin.Context, data interface{}) {
-	c.JSON(200, ResponseData{
-		ResponseCode:    200,
-		ResponseMessage: "Success",
-		Data:            data,
+func ResponseSuccess(c *gin.Context, data interface{}, desc string) {
+	c.JSON(http.StatusOK, APIResponse{
+		Status:       "success",
+		ResponseCode: 200,
+		ResponseDesc: desc,
+		Timestamp:    time.Now(),
+		Data:         data,
 	})
 }
 
-func ErrorResponse(c *gin.Context, code int, message string, errors ...string) {
-	resp := ResponseData{
-		ResponseCode:    code,
-		ResponseMessage: message,
-	}
+func ResponseSuccessList(c *gin.Context, data interface{}, total int64, offset, limit int, desc string) {
+	c.JSON(http.StatusOK, APIResponse{
+		Status:       "success",
+		ResponseCode: 200,
+		ResponseDesc: desc,
+		Timestamp:    time.Now(),
+		DataList:     data,
+		Pagination: &Pagination{
+			TotalRow: total,
+			Offset:   offset,
+			Limit:    limit,
+		},
+	})
+}
 
-	// Jika ada errors, isi
-	if len(errors) > 0 && errors[0] != "" {
-		resp.Error = errors[0]
-	}
-
-	c.JSON(code, resp)
+func ErrorResponse(c *gin.Context, code int, desc string) {
+	c.JSON(code, APIResponse{
+		Status:       "error",
+		ResponseCode: code,
+		ResponseDesc: desc,
+		Timestamp:    time.Now(),
+	})
 }
