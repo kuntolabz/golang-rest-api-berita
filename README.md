@@ -1,4 +1,4 @@
-# 🚀 Golang REST API — Clean Architecture Example
+# 🚀 Golang REST API — Berita
 
 <p align="center">
 <img src="https://img.shields.io/badge/Golang-1.20+-blue?style=flat&logo=go">
