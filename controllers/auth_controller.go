@@ -1,6 +1,9 @@
 package controllers
 
 import (
+	"net/http"
+	"time"
+
 	"github.com/gin-gonic/gin"
 	"github.com/kunto/golang-rest-api-berita/dto"
 	"github.com/kunto/golang-rest-api-berita/services"
@@ -30,6 +33,12 @@ func (ctrl *AuthController) Login(c *gin.Context) {
 		return
 	}
 
-	utils.ResponseSuccess(c, token, "Login berhasil")
+	c.JSON(http.StatusOK, gin.H{
+		"Status":       "success",
+		"ResponseCode": 200,
+		"ResponseDesc": "Login Successful",
+		"Timestamp":    time.Now(),
+		"Token":        token,
+	})
 
 }

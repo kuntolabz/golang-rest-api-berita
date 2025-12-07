@@ -20,7 +20,7 @@ func main() {
 	r := gin.Default()
 	//r.Use(middleware.AuthMiddleware())
 
-	routes.UserRoute(r)
+	routes.InitRoutes(r)
 
 	r.Run(":8080")
 }
