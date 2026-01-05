@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/kunto/golang-rest-api-berita/dto"
+	dto "github.com/kunto/golang-rest-api-berita/dto/cms"
 	"github.com/kunto/golang-rest-api-berita/services"
 	"github.com/kunto/golang-rest-api-berita/utils"
 )

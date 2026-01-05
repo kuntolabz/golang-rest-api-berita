@@ -2,7 +2,7 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/kunto/golang-rest-api-berita/controllers"
+	controllers "github.com/kunto/golang-rest-api-berita/controllers/cms"
 	"github.com/kunto/golang-rest-api-berita/middleware"
 	"github.com/kunto/golang-rest-api-berita/services"
 )

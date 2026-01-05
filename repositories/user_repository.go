@@ -3,7 +3,7 @@ package repositories
 import (
 	"errors"
 
-	"github.com/kunto/golang-rest-api-berita/dto"
+	dto "github.com/kunto/golang-rest-api-berita/dto/cms"
 	"github.com/kunto/golang-rest-api-berita/models"
 
 	"gorm.io/gorm"

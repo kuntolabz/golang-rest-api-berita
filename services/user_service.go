@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
-	"github.com/kunto/golang-rest-api-berita/dto"
+	dto "github.com/kunto/golang-rest-api-berita/dto/cms"
 	"github.com/kunto/golang-rest-api-berita/models"
 	"github.com/kunto/golang-rest-api-berita/repositories"
 	"golang.org/x/crypto/bcrypt"
