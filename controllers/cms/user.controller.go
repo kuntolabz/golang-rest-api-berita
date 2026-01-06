@@ -56,7 +56,7 @@ func (c *UserController) CreateUser(ctx *gin.Context) {
 		return
 	}
 
-	user, err := c.service.Create(input)
+	user, err := c.service.Create(ctx.Request.Context(), input)
 	if err != nil {
 		utils.ErrorResponse(ctx, 400, err.Error())
 		return
@@ -86,7 +86,7 @@ func (c *UserController) UpdateUser(ctx *gin.Context) {
 		return
 	}
 
-	result, err := c.service.Update(id, input)
+	result, err := c.service.Update(ctx.Request.Context(), id, input)
 	if err != nil {
 		utils.ErrorResponse(ctx, 400, err.Error())
 		return

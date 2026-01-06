@@ -1,7 +1,9 @@
 package services
 
 import (
+	"context"
 	"errors"
+	"fmt"
 	"regexp"
 	"strings"
 
@@ -9,14 +11,15 @@ import (
 	dto "github.com/kunto/golang-rest-api-berita/dto/cms"
 	"github.com/kunto/golang-rest-api-berita/models"
 	"github.com/kunto/golang-rest-api-berita/repositories"
+	"github.com/kunto/golang-rest-api-berita/utils"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type UserService interface {
 	GetList(search string, limit, offset int) ([]dto.UserDTO, int64, error)
-	Create(req dto.InsertUserDTO) (interface{}, error)
+	Create(ctx context.Context, req dto.InsertUserDTO) (interface{}, error)
 	GetDetail(id string) (dto.UserDTO, error)
-	Update(id string, req dto.InsertUserDTO) (dto.UserDTO, error)
+	Update(ctx context.Context, id string, req dto.InsertUserDTO) (dto.UserDTO, error)
 	Delete(id string) error
 }
 
@@ -39,12 +42,13 @@ func (s *userService) GetList(search string, limit, offset int) ([]dto.UserDTO, 
 	return s.repo.GetList(search, limit, offset)
 }
 
-func (s *userService) Create(req dto.InsertUserDTO) (interface{}, error) {
+func (s *userService) Create(ctx context.Context, req dto.InsertUserDTO) (interface{}, error) {
 
 	req.Name = strings.TrimSpace(req.Name)
 	req.Email = strings.TrimSpace(req.Email)
 	req.Username = strings.TrimSpace(req.Username)
 	req.Password = strings.TrimSpace(req.Password)
+	userID, _ := utils.GetUserID(ctx)
 
 	if req.Name == "" || req.Email == "" || req.Username == "" || req.Password == "" {
 		return nil, errors.New("data wajib diisi")
@@ -75,15 +79,16 @@ func (s *userService) Create(req dto.InsertUserDTO) (interface{}, error) {
 	// Hash
 	hash, _ := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 
-	user := models.User{
-		Name:     req.Name,
-		Email:    req.Email,
-		Username: req.Username,
-		Password: string(hash),
-		Alamat:   req.Alamat,
-		IdRole:   req.IdRole,
+	user := models.Ms_user{
+		Name:      req.Name,
+		Email:     req.Email,
+		Username:  req.Username,
+		Password:  string(hash),
+		Alamat:    req.Alamat,
+		IdRole:    req.IdRole,
+		CreatedBy: userID,
 	}
-
+	fmt.Println(userID)
 	id, createdAt, err := s.repo.CreateUser(user)
 	if err != nil {
 		return nil, err
@@ -96,7 +101,7 @@ func (s *userService) Create(req dto.InsertUserDTO) (interface{}, error) {
 		"username":   user.Username,
 		"alamat":     user.Alamat,
 		"created_at": createdAt,
-		"status":     1,
+		"created_by": userID,
 		"id_role":    user.IdRole,
 	}, nil
 }
@@ -123,7 +128,7 @@ func (s *userService) Delete(id string) error {
 	return s.repo.DeleteUser(id)
 }
 
-func (s *userService) Update(id string, input dto.InsertUserDTO) (dto.UserDTO, error) {
+func (s *userService) Update(ctx context.Context, id string, input dto.InsertUserDTO) (dto.UserDTO, error) {
 	// cek user exist
 	_, err := s.repo.GetByID(id)
 	if err != nil {
@@ -153,6 +158,8 @@ func (s *userService) Update(id string, input dto.InsertUserDTO) (dto.UserDTO, e
 		return dto.UserDTO{}, errors.New("tidak ada field yang diupdate")
 	}
 
+	userID, _ := utils.GetUserID(ctx)
+	updateData["updated_by"] = userID
 	// save
 	if err := s.repo.UpdateUser(id, updateData); err != nil {
 		return dto.UserDTO{}, errors.New("gagal memperbarui user")
@@ -168,5 +175,6 @@ func (s *userService) Update(id string, input dto.InsertUserDTO) (dto.UserDTO, e
 		Username: updated.Username,
 		Alamat:   updated.Alamat,
 		IdRole:   updated.IdRole,
+		Status:   updated.Status,
 	}, nil
 }

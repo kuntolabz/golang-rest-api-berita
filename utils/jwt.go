@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"context"
 	"os"
 	"time"
 
@@ -14,6 +15,9 @@ type JWTClaim struct {
 	Email                string `json:"email"`   // email user
 	jwt.RegisteredClaims        // claim bawaan (exp, iss, dll)
 }
+type contextKey string
+
+const userIDKey contextKey = "user_id"
 
 // Generate token JWT
 // GenerateToken → membuat token JWT untuk user
@@ -59,4 +63,13 @@ func ValidateToken(tokenString string) (*JWTClaim, error) {
 	}
 
 	return claims, nil
+}
+
+func SetUserID(ctx context.Context, userID string) context.Context {
+	return context.WithValue(ctx, userIDKey, userID)
+}
+
+func GetUserID(ctx context.Context) (string, bool) {
+	userID, ok := ctx.Value(userIDKey).(string)
+	return userID, ok
 }

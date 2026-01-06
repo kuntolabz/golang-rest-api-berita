@@ -1,14 +1,13 @@
 package dto
 
 type UserDTO struct {
-	IdUser     string `json:"id"`
-	Name       string `json:"name"`
-	Email      string `json:"email"`
-	Username   string `json:"username"`
-	Alamat     string `json:"alamatUser"`
-	Created_at string `json:"createdDate"`
-	Status     string `json:"status"`
-	IdRole     string `json:"id_role"`
+	IdUser   string `json:"id"`
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Username string `json:"username"`
+	Alamat   string `json:"alamatUser"`
+	Status   string `json:"status"`
+	IdRole   string `json:"id_role"`
 }
 
 type InsertUserDTO struct {

@@ -39,6 +39,8 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		// Set user context biar bisa dipakai di controller/service
 		c.Set("user", userData)
+		newCtx := utils.SetUserID(c.Request.Context(), userData.UserID)
+		c.Request = c.Request.WithContext(newCtx)
 
 		c.Next()
 	}
